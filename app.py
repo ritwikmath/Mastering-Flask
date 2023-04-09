@@ -1,39 +1,73 @@
-from flask import Flask, render_template, url_for, request, abort, redirect
+from flask import Flask, request
+from database.mysql import Database as MySql
+from sqlalchemy import Table, Column, Integer, String, MetaData, insert
+import json
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Hello Developers!'
+meta = MetaData()
 
-@app.route('/', methods=['POST'])
-def postIndex():
-    return 'You have made a POST request'
+developers = Table(
+   'developers', meta, 
+   Column('id', Integer, primary_key = True), 
+   Column('first_name', String(255)), 
+   Column('last_name', String(255)), 
+   Column('expert', String(255)), 
+)
 
-@app.route('/users/<string:name>')
-def userName(name):
-    return f'Name: {name}'
+@app.post('/')
+def create():
+    try:
+        db = MySql()
+        ins = insert(developers).values(first_name = request.json.get('first_name'), 
+                                last_name = request.json.get('last_name'),
+                                expert = request.json.get('expert'))
+        result = db.connection.execute(ins)
+        return {'status': True, 'data': result.rowcount}
+    except Exception as ex:
+        return {'status': False, 'error': ex.__str__()}
 
-@app.route('/path/<path:path>')
-def path(path):
-    return f'Entered subpath: {path}'
+@app.get('/')
+def fetch():
+    try:
+        db = MySql()
+        ins = developers.select()
+        result = db.connection.execute(ins)
+        developers_list = []
+        for row in result:
+            developer_dict = {'id': row.id, 'first_name': row.first_name, 'last_name': row.last_name, 'expert': row.expert}
+            developers_list.append(developer_dict)
+        return {'status': True, 'data': developers_list}
+    except Exception as ex:
+        return {'status': False, 'error': ex.__str__()}
 
-@app.route('/my-name')
-def myName():
-    return 'Ritwik'
+@app.patch('/<int:id>')
+def update(id):
+    try:
+        db = MySql()
+        ins = developers.update().where(developers.c.id == id).values(**request.json)
+        db.connection.execute(ins)
+        updated_row = db.connection.execute(developers.select().where(developers.c.id == id))
+        developers_list = []
+        for row in updated_row:
+            developer_dict = {'id': row.id, 'first_name': row.first_name, 'last_name': row.last_name, 'expert': row.expert}
+            developers_list.append(developer_dict)
+        return {'status': True, 'data': developers_list[0]}
+    except Exception as ex:
+        return {'status': False, 'error': ex.__str__()}
 
-@app.get('/user-info')
-def form():
-    message = request.args.get('message')
-    return render_template('form.html', message=message)
-
-@app.post('/user-info')
-def formRequest():
-    data = request.form
-    if not data.get('firstname') or not data.get('lastname') or not data.get('country'):
-        abort(401)
-    message = f"{data.get('firstname')} {data.get('lastname')} lives in {data.get('country')}"
-    return redirect(f"{url_for('form')}?message={message}")
+@app.delete('/<int:id>')
+def delete(id):
+    try:
+        db = MySql()
+        ins = developers.delete().where(developers.c.id == id)
+        db.connection.execute(ins)
+        return {'status': True, 'data': {'deleted_id': id}}
+    except Exception as ex:
+        return {'status': False, 'error': ex.__str__()}
 
 if __name__ == '__main__':
+    db = MySql()
+    db.connect()
+    meta.create_all(db.engine)
     app.run(debug=True)

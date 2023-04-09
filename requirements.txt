@@ -1,1 +1,6 @@
 flask
+SQLAlchemy
+cryptography
+pymysql
+pymongo
+pymongo[srv]
