@@ -1,5 +1,6 @@
 from flask import Flask, request
 from database.mysql import Database as MySql
+from database.mongo import Database as Mongo
 from sqlalchemy import Table, Column, Integer, String, MetaData, insert
 import json
 
@@ -14,6 +15,11 @@ developers = Table(
    Column('last_name', String(255)), 
    Column('expert', String(255)), 
 )
+
+@app.before_request
+def logRequest():
+    # Store data in Mongo
+    pass
 
 @app.post('/')
 def create():
