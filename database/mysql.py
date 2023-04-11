@@ -3,8 +3,8 @@ import sqlalchemy
 class Database:
     __engine = None
     __connection = None
-    __user = 'root'
-    __pass = 'secret'
+    __user = 'ritwik'
+    __pass = 'ronnie123'
     __host = 'localhost'
     __port = 3306
     __db = 'flask'
@@ -20,9 +20,9 @@ class Database:
 
     @property
     def connection(self):
-        if not Database.__connection:
-            raise RuntimeError('No database connection available.')
-        return Database.__connection
+        if Database.__connection is not None:
+            return Database.__connection
+        raise RuntimeError('No database connection available.')
 
     @property
     def engine(self):

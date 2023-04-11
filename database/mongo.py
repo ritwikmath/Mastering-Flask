@@ -18,12 +18,12 @@ class Database:
 
     @property
     def db(self):
-        if not Database.__connection:
-            raise RuntimeError('No database connection available.')
-        return Database.__connection
+        if Database.__connection is not None:
+            return Database.__connection
+        raise RuntimeError('No database connection available.')
 
     @property
-    def engine(self):
+    def client(self):
         if not Database.__client:
             raise RuntimeError('No database engine initialized.')
         return Database.__client
