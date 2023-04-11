@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .card-container {
+            width: 80%;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-auto-rows: auto;
+            grid-gap: 1rem;
+        }
+
+        .card {
+            background-color: rgb(210, 241, 231);
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div class="card-container">
+        {% for log in logs %}
+            <div class="card">
+                {% for key, value in log.items() %}
+                    <h4>{{key}}: </h4>
+                    <p>{{value}}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

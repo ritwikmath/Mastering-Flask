@@ -3,8 +3,8 @@ import sqlalchemy
 class Database:
     __engine = None
     __connection = None
-    __user = 'ritwik'
-    __pass = 'ronnie123'
+    __user = 'ronnie'
+    __pass = 'ronnie1993'
     __host = 'localhost'
     __port = 3306
     __db = 'flask'
