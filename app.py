@@ -23,6 +23,7 @@ def logRequest():
         return
     Mongo().db.logs.insert_one({
         'type': 'request',
+        'client_addr': request.remote_addr,
         'url': request.url,
         'http_method': request.method,
         'body': request.method in ['POST', 'PATCH'] and request.get_json() or None

@@ -17,9 +17,12 @@ def fetchAlllogs():
 def softDeletLog(doc_id):
     try:
         updated_doc = Mongo().db.logs.find_one_and_update({'_id': ObjectId(doc_id)},
-                                   {
-                                        '$set':  {'deleted': True}
-                                   }, upsert=True, new=True)
+            {
+                '$set':  {'deleted': True}
+            }, 
+            upsert=True, 
+            new=True
+        )
         return {'status': True, 'data': json.loads(json.dumps(updated_doc, default=str))}
     except Exception as ex:
         return {'status': False, 'error': ex.__str__()}
