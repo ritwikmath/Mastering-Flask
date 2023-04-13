@@ -7,7 +7,7 @@ from sqlalchemy import insert
 
 developer_bp = Blueprint('developer', __name__, url_prefix='/developers')
 
-@developer_bp.post('/')
+@developer_bp.post('')
 def create():
     try:
         db = MySql()
@@ -29,7 +29,7 @@ def create():
         })
         return {'status': False, 'error': ex.__str__()}
 
-@developer_bp.get('/')
+@developer_bp.get('')
 def fetch():
     try:
         db = MySql()

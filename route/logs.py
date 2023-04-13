@@ -5,7 +5,7 @@ import json
 
 log_bp = Blueprint('log', __name__, url_prefix='/logs')
 
-@log_bp.get('/')
+@log_bp.get('')
 def fetchAlllogs():
     try:
         logs = list(Mongo().db.logs.find({}))
@@ -13,7 +13,7 @@ def fetchAlllogs():
     except Exception as ex:
         return {'status': False, 'error': ex.__str__()}
     
-@log_bp.put('/<string:doc_id>')
+@log_bp.put('/<string:doc_id>/')
 def softDeletLog(doc_id):
     try:
         updated_doc = Mongo().db.logs.find_one_and_update({'_id': ObjectId(doc_id)},
@@ -27,7 +27,7 @@ def softDeletLog(doc_id):
     except Exception as ex:
         return {'status': False, 'error': ex.__str__()}
 
-@log_bp.delete('/<string:doc_id>')
+@log_bp.delete('/<string:doc_id>/')
 def deletLog(doc_id):
     try:
         Mongo().db.logs.delete_one({'_id': ObjectId(doc_id)})

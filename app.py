@@ -1,9 +1,8 @@
-from flask import Flask, request, url_for, current_app
-from bson import ObjectId
+from flask import Flask, request
+from datetime import datetime
 from database.mysql import Database as MySql
 from database.mongo import Database as Mongo
-from sqlalchemy import Table, Column, Integer, String, MetaData, insert
-import json
+from sqlalchemy import Table, Column, Integer, String, MetaData
 
 app = Flask(__name__)
 
@@ -26,7 +25,8 @@ def logRequest():
         'client_addr': request.remote_addr,
         'url': request.url,
         'http_method': request.method,
-        'body': request.method in ['POST', 'PATCH'] and request.get_json() or None
+        'body': request.method in ['POST', 'PATCH'] and request.get_json() or None,
+        'created_at': datetime.now()
     })
 
 if __name__ == '__main__':
