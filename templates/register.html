@@ -5,11 +5,13 @@
 {% block content %}
 <div class="registration form">
     <header>Signup</header>
-    <form action="#">
-      <input type="text" placeholder="Enter your email">
-      <input type="password" placeholder="Create a password">
-      <input type="password" placeholder="Confirm your password">
-      <input type="button" class="button" value="Signup">
+    <form method="POST" action="{{url_for('auth.register')}}">
+      <input name="name" type="text" placeholder="Enter your full name">
+      <input name="skills" type="text" placeholder="Enter your skills separated by ','">
+      <input name="email" type="text" placeholder="Enter your email">
+      <input name="password" type="password" placeholder="Create a password">
+      <input name="confirm_password" type="password" placeholder="Confirm your password">
+      <input type="submit" class="button" value="Signup">
     </form>
     <div class="signup">
       <span class="signup">Already have an account?

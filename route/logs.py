@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, url_for
 from database.mongo import Database as Mongo
 from bson import ObjectId
 import json

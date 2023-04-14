@@ -79,6 +79,9 @@ body{
 .error {
     width: 30%;
     margin: auto;
-    background-color: red;
+    background-color: #FFA500;
     color: #fff;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
 }
