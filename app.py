@@ -1,20 +1,8 @@
 from flask import Flask, request
 from datetime import datetime
-from database.mysql import Database as MySql
 from database.mongo import Database as Mongo
-from sqlalchemy import Table, Column, Integer, String, MetaData
 
 app = Flask(__name__)
-
-meta = MetaData()
-
-developers = Table(
-   'developers', meta, 
-   Column('id', Integer, primary_key = True), 
-   Column('first_name', String(255)), 
-   Column('last_name', String(255)), 
-   Column('expert', String(255)), 
-)
 
 @app.before_request
 def logRequest():
@@ -30,9 +18,6 @@ def logRequest():
     })
 
 if __name__ == '__main__':
-    db = MySql()
-    db.connect()
-    meta.create_all(db.engine)
     Mongo().connect()
     from route.logs import log_bp
     from route.developers import developer_bp
