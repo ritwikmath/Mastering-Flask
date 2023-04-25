@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, flash
+from flask import Blueprint, request, redirect, url_for, flash, session
 from database.mongo import Database as Mongo
 from bson import ObjectId
 from werkzeug.exceptions import NotFound, BadRequest
@@ -18,6 +18,8 @@ def login():
         match = check_password_hash(developer.get('password'), request.form['password'])
         if not match:
             raise BadRequest('Password did not match')
+        del developer['password']
+        session['loggedin_user'] = json.loads(json.dumps(developer, default=str))
         return redirect(url_for('home.dashboard'))
     except Exception as ex:
         flash(ex.__str__())
@@ -45,3 +47,16 @@ def register():
     except Exception as ex:
         flash(ex.__str__())
         return redirect(url_for('home.registerForm'))
+
+@auth_bp.post('/logout')
+def logout():
+    try:
+        session.pop('loggedin_user')
+        return redirect(url_for('home.loginForm'))
+    except Exception as ex:
+        Mongo().db.logs.insert_one({
+            'type': 'error',
+            'url': request.url,
+            'message': ex.__str__()
+        })
+        return {'status': False, 'error': ex.__str__()}

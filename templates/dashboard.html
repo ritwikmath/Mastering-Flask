@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Document</title>
     <style>
         h1 {
@@ -24,12 +25,21 @@
             padding: 1rem;
             border-radius: 1rem;
         }
+
+        .button {
+            display: block;
+            width: 10% !important;
+            margin: 1rem 2rem 0 auto !important;
+        }
     </style>
 </head>
 <body>
+    <form method="post" action="{{url_for('auth.logout')}}" class="form">
+      <input type="submit" class="button" value="Logout">
+    </form>
     <h1>Dashboard</h1>
     <div class="card-container">
-        {% for log in logs %}
+        {% for log in logs[3::-1] %}
             <div class="card">
                 {% for key, value in log.items() %}
                     <h4>{{key}}: </h4>

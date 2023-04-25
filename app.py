@@ -27,5 +27,5 @@ if __name__ == '__main__':
     app.register_blueprint(developer_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(auth_bp)
-    app.secret_key = '03df06392079d7b37dce3c1c460de7c7'
+    app.secret_key = '8d31312aa6efba09119e9ecb1246e32ba5f6fd862a90bc107298d809d902cbce'
     app.run(debug=True)
