@@ -85,3 +85,9 @@ body{
     padding: 1rem;
     margin-top: 2rem;
 }
+
+.input-error {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: red;
+}

@@ -6,8 +6,14 @@
 <div class="login form">
     <header>Login</header>
     <form method="POST" action="{{url_for('auth.login')}}">
-      <input name="email" type="text" placeholder="Enter your email">
-      <input name="password" type="password" placeholder="Enter your password">
+      {% if errors and errors.email %}
+        <span class="input-error">{{ errors.email[0] }}</span>
+      {% endif %}
+      {{ form.email(placeholder="Enter your email", style=errors and errors.email and 'border: red 1px solid') | safe }}
+      {% if errors and errors.password %}
+        <span class="input-error">{{ errors.password[0] }}</span>
+      {% endif %}
+      {{ form.password(placeholder="Enter your password", style=errors and errors.password and 'border: red 1px solid') | safe }}
       <a href="#">Forgot password?</a>
       <input type="submit" class="button" value="Login">
     </form>

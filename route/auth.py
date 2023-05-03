@@ -4,20 +4,21 @@ from bson import ObjectId
 from werkzeug.exceptions import NotFound, BadRequest
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
+from forms.LoginForm import LoginForm
+from forms.RegisterForm import RegisterForm
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.post('/login')
 def login():
     try:
+        form = LoginForm(request.form)
+        if not form.validate():
+            session['errors'] = form.errors
+            return redirect(url_for('home.loginForm'))
         developer = Mongo().db.developers.find_one({
             'email': request.form['email']
         })
-        if not developer:
-            raise NotFound('Email is not registred')
-        match = check_password_hash(developer.get('password'), request.form['password'])
-        if not match:
-            raise BadRequest('Password did not match')
         del developer['password']
         session['loggedin_user'] = json.loads(json.dumps(developer, default=str))
         return redirect(url_for('home.dashboard'))
@@ -28,13 +29,10 @@ def login():
 @auth_bp.post('/register')
 def register():
     try:
-        developer = Mongo().db.developers.find_one({
-            'email': request.form['email']
-        })
-        if developer:
-            raise BadRequest('Email is already registred')
-        if request.form['password'] != request.form['confirm_password']:
-            raise BadRequest('Password did not match')
+        form = RegisterForm(request.form)
+        if not form.validate():
+            session['errors'] = form.errors
+            return redirect(url_for('home.registerForm'))
         password = generate_password_hash(request.form['password'], method='pbkdf2:sha256', salt_length=9)
         skills = request.form['skills'].split(',')
         Mongo().db.developers.insert_one({

@@ -6,11 +6,26 @@
 <div class="registration form">
     <header>Signup</header>
     <form method="POST" action="{{url_for('auth.register')}}">
-      <input name="name" type="text" placeholder="Enter your full name">
-      <input name="skills" type="text" placeholder="Enter your skills separated by ','">
-      <input name="email" type="text" placeholder="Enter your email">
-      <input name="password" type="password" placeholder="Create a password">
-      <input name="confirm_password" type="password" placeholder="Confirm your password">
+      {% if errors and errors.name %}
+        <span class="input-error">{{ errors.name[0] }}</span>
+      {% endif %}
+      {{ form.name(placeholder="Enter your name", style=errors and errors.name and 'border: red 1px solid') | safe }}
+      {% if errors and errors.skills %}
+        <span class="input-error">{{ errors.skills[0] }}</span>
+      {% endif %}
+      {{ form.skills(placeholder="Enter your skills", style=errors and errors.skills and 'border: red 1px solid') | safe }}
+      {% if errors and errors.email %}
+        <span class="input-error">{{ errors.email[0] }}</span>
+      {% endif %}
+      {{ form.email(placeholder="Enter your email", style=errors and errors.email and 'border: red 1px solid') | safe }}
+      {% if errors and errors.password %}
+        <span class="input-error">{{ errors.password[0] }}</span>
+      {% endif %}
+      {{ form.password(placeholder="Enter your password", style=errors and errors.password and 'border: red 1px solid') | safe }}
+      {% if errors and errors.confirm_password %}
+        <span class="input-error">{{ errors.confirm_password[0] }}</span>
+      {% endif %}
+      {{ form.confirm_password(placeholder="Enter your confirm password", style=errors and errors.confirm_password and 'border: red 1px solid') | safe }}
       <input type="submit" class="button" value="Signup">
     </form>
     <div class="signup">

@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, url_for, session, redirect, request
 from database.mongo import Database as Mongo
+from forms.LoginForm import LoginForm
+from forms.RegisterForm import RegisterForm
 import json
 
 home_bp = Blueprint('home', __name__)
@@ -15,10 +17,22 @@ def dashboard():
 def loginForm():
     if session.get('loggedin_user'):
         return redirect(request.referrer or url_for('home.dashboard'))
-    return render_template('login.html')
+
+    form = LoginForm()
+    errors = None
+    if session.get('errors'):
+        errors = session['errors']
+        del session['errors']
+    return render_template('login.html', form=form, errors=errors)
 
 @home_bp.get('/register')
 def registerForm():
     if session.get('loggedin_user'):
         return redirect(request.referrer or url_for('home.dashboard'))
-    return render_template('register.html')
+
+    form = RegisterForm()
+    errors = None
+    if session.get('errors'):
+        errors = session['errors']
+        del session['errors']
+    return render_template('register.html', form=form, errors=errors)
